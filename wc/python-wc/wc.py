@@ -1,7 +1,5 @@
 #Imports
-import sys
-import os
-import locale
+import sys, os, locale
 
 # Data
 argv = sys.argv[1:]
@@ -33,9 +31,11 @@ def word_return(lines):
     word_count = sum(len(line.split()) for line in lines)
     return word_count
 
-def character_return(contents):
+def character_return(lines):
     #This runs for the -m
-    char_count = len(contents)
+    char_count = 0
+    for line in lines:
+        char_count += len(line)
     return char_count
 
 
@@ -68,9 +68,10 @@ def main():
                     print(f"{word_return(lines)} {file_name}")
                 if arg_type == "-m":
                     print(f"{character_return(contents)} {file_name}")
-        except:
+        except Exception as e:
             print("Wrong use of arguments or file")
             print("For more information run: python3 wc.py -h")
+            print(f"Exception: {e}")
 
 # Run
 if __name__ == "__main__":
