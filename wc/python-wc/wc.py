@@ -1,9 +1,11 @@
 #Imports
 import sys
 import os
+import locale
 
 # Data
 argv = sys.argv[1:]
+locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 # Functions
 def error_handling():
@@ -31,9 +33,8 @@ def word_return(lines):
     word_count = sum(len(line.split()) for line in lines)
     return word_count
 
-def character_return(file):
+def character_return(contents):
     #This runs for the -m
-    contents = file.read()
     char_count = len(contents)
     return char_count
 
@@ -41,6 +42,7 @@ def character_return(file):
 # Main function
 def main():
     error_handling()
+    
     if len(argv) == 1:
         file_name = argv[0]
         if file_name == "-h":
@@ -49,6 +51,26 @@ def main():
         with open(file_name) as file:
             lines = file.readlines()
             print(f"  {line_return(lines)}  {word_return(lines)} {byte_return(file_name)} {file_name}")
+    
+    if len(argv) == 2:
+        arg_type = argv[0]
+        file_name = argv[1]
+        
+        try:
+            with open(file_name) as file:
+                contents = file.read()
+                lines = file.readlines()
+                if arg_type == "-c":
+                    print(f"{byte_return(file_name)} {file_name}")
+                if arg_type == "-l":
+                    print(f"{line_return(lines)} {file_name}")
+                if arg_type == "-w":
+                    print(f"{word_return(lines)} {file_name}")
+                if arg_type == "-m":
+                    print(f"{character_return(contents)} {file_name}")
+        except:
+            print("Wrong use of arguments or file")
+            print("For more information run: python3 wc.py -h")
 
 # Run
 if __name__ == "__main__":
